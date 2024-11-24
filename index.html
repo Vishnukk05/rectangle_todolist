@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List App</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .task-categories {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .category-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .category-circle.personal {
+      background-color: #f28b82; 
+    }
+    .category-circle.freelance {
+      background-color: #fbbc04; 
+    }
+    .category-circle.work {
+      background-color: #34a853; 
+    }
+    .category-circle.selected {
+      border: 2px solid #000; 
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Left Sidebar -->
+    <aside class="sidebar">
+      <div class="profile">
+        <img src="download.png" alt="Profile Picture" class="profile-picture">
+        <h2 class="profile-name">Do-it</h2>
+        <p class="profile-subtitle">VISHNU K K</p>
+      </div>
+      <nav class="menu">
+        <h3>Today’s Tasks</h3>
+        <ul>
+          <li><span class="dot personal"></span> Personal</li>
+          <li><span class="dot freelance"></span> Freelance</li>
+          <li><span class="dot work"></span> Work</li>
+        </ul>
+        <h3>Scheduled Tasks</h3>
+        <ul>
+          <li><a href="setting.html"><b>Settings</b></a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+      <h1>Today’s Main Focus</h1>
+      <h2>Design Team Meeting</h2>
+      <div class="task-input">
+        <input type="text" id="task-input" placeholder="What is your next task?">
+        <div class="task-categories">
+          <div class="category-circle personal" onclick="selectCategory('personal')"></div>
+          <div class="category-circle freelance" onclick="selectCategory('freelance')"></div>
+          <div class="category-circle work" onclick="selectCategory('work')"></div>
+        </div>
+        <button class="add-task-btn" onclick="addTask()">+</button>
+      </div>
+      <div class="task-list" id="task-list">
+        <!-- Existing tasks -->
+        <div class="task personal">
+          <span>Work out</span>
+          <span>8:00 am</span>
+        </div>
+        <div class="task work">
+          <span>Design Team Meeting</span>
+          <span>2:30 pm</span>
+        </div>
+        <div class="task freelance">
+          <span>Hand off the project</span>
+          <span>7:00 pm</span>
+        </div>
+        <div class="task personal">
+          <span>Read 5 pages of "Sprint"</span>
+          <span>10:30 pm</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    let selectedCategory = '';
+
+    function selectCategory(category) {
+      // Deselect previously selected category
+      document.querySelectorAll('.category-circle').forEach(circle => {
+        circle.classList.remove('selected');
+      });
+
+      // Highlight the selected category
+      const selectedCircle = document.querySelector(`.category-circle.${category}`);
+      selectedCircle.classList.add('selected');
+
+      // Set selected category
+      selectedCategory = category;
+    }
+
+    function addTask() {
+      const taskInput = document.getElementById('task-input');
+      const taskList = document.getElementById('task-list');
+
+      const taskText = taskInput.value.trim();
+
+      if (taskText === '') {
+        alert('Please enter a task!');
+        return;
+      }
+
+      if (!selectedCategory) {
+        alert('Please select a category!');
+        return;
+      }
+
+      const taskDiv = document.createElement('div');
+      taskDiv.classList.add('task', selectedCategory); 
+
+      const taskName = document.createElement('span');
+      taskName.textContent = taskText;
+
+      const taskTime = document.createElement('span');
+      const currentTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      taskTime.textContent = currentTime;
+
+      taskDiv.appendChild(taskName);
+      taskDiv.appendChild(taskTime);
+
+      taskList.appendChild(taskDiv);
+
+      taskInput.value = '';
+      selectedCategory = ''; 
+      document.querySelectorAll('.category-circle').forEach(circle => {
+        circle.classList.remove('selected');
+      });
+    }
+  </script>
+</body>
+</html>
